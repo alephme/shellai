@@ -1,6 +1,11 @@
 # shellai — AI Command Generator
 
-Turn natural language into shell commands, right in your terminal.
+> **Lightweight · Cross‑platform · In‑shell execution**
+
+Turn natural language into shell commands, right in your terminal.  
+No bloat — single Python file, three dependencies, `uv tool install .` and you're done.
+
+Unlike similar tools, `shellai` can run commands **directly in your current shell** — `cd`, environment variables, and all side effects actually stick. Works on Windows (PowerShell) and Linux/macOS (bash).
 
 ```bash
 ai list all PDF files modified in the last 7 days
@@ -98,7 +103,12 @@ MIT
 
 ## shellai — AI 命令行生成器（中文版）
 
-用自然语言生成终端命令，直接在终端里用。
+> **轻量 · 跨平台 · 原地执行**
+
+用自然语言生成终端命令，直接在终端里用。  
+无冗余——单个 Python 文件、三个依赖、`uv tool install .` 即可完成。
+
+与同类工具不同，`shellai` 可以在**当前 shell 中直接执行**命令——`cd`、环境变量等所有副作用都会保留。同时支持 Windows (PowerShell) 和 Linux/macOS (bash)。
 
 ```bash
 ai 列出最近7天修改过的所有 PDF 文件
