@@ -1,33 +1,31 @@
 """
-ai — AI-powered CLI command generator and executor.
+myai — AI-powered CLI command generator and executor.
 
 Usage:
-    ai <natural language prompt>             # interactive mode (Rich panel, subprocess)
-    ai -p <prompt>                           # print-only (for pipe: ai -p ... | iex)
-    ai -c <prompt>                           # print + copy to clipboard
-    ai --setup                               # auto-configure $PROFILE for in-shell execution
-    ai --teardown                            # remove $PROFILE configuration
+    myai <natural language prompt>            # interactive mode (Rich panel, subprocess)
+    myai -p <prompt>                          # print-only (for pipe: myai -p ... | iex)
+    myai -c <prompt>                          # print + copy to clipboard
+    myai --setup                              # auto-configure $PROFILE for in-shell execution
+    myai --teardown                           # remove $PROFILE configuration
 
 Examples:
-    ai list all PDF files modified in the last 7 days
-    ai -p find node_modules folders | iex
-    ai -c kill processes using port 3000
+    myai list all PDF files modified in the last 7 days
+    myai -p find node_modules folders | iex
+    myai -c kill processes using port 3000
 """
 
-import base64
 import os
 import subprocess
 import sys
 from pathlib import Path
 
 from dotenv import load_dotenv
-
 from openai import OpenAI
 from rich.console import Console
-from rich.panel import Panel
-from rich.syntax import Syntax
-from rich.prompt import Prompt
 from rich.markdown import Markdown
+from rich.panel import Panel
+from rich.prompt import Prompt
+from rich.syntax import Syntax
 
 console = Console()
 
@@ -42,9 +40,9 @@ API_KEY = os.environ.get("OPENAI_API_KEY") or os.environ.get("AI_API_KEY")
 BASE_URL = os.environ.get("AI_BASE_URL", "https://api.deepseek.com/v1")
 MODEL = os.environ.get("AI_MODEL", "deepseek-v4-flash")
 
-# Path to the bundled shell-ai.ps1 (installed alongside this module)
+# Path to the bundled myai.ps1 (installed alongside this module)
 _THIS_DIR = Path(__file__).resolve().parent
-_PS1_PATH = _THIS_DIR / "shell-ai.ps1"
+_PS1_PATH = _THIS_DIR / "myai.ps1"
 
 
 # ---------------------------------------------------------------------------
@@ -52,22 +50,22 @@ _PS1_PATH = _THIS_DIR / "shell-ai.ps1"
 # ---------------------------------------------------------------------------
 
 HELP_TEXT = Markdown("""\
-# ai — AI Command Generator
+# myai — AI Command Generator
 
-**Usage:** `ai <natural language description>`
+**Usage:** `myai <natural language description>`
 
 **Modes:**
-- `ai <prompt>` — interactive mode (Rich panel + subprocess execution)
-- `ai -p <prompt>` — print-only, for piping: `ai -p ... | iex`
-- `ai -c <prompt>` — print + copy to clipboard
-- `ai --setup` — configure `$PROFILE` for in-shell execution
-- `ai --teardown` — remove `$PROFILE` configuration
+- `myai <prompt>` — interactive mode (Rich panel + subprocess execution)
+- `myai -p <prompt>` — print-only, for piping: `myai -p ... | iex`
+- `myai -c <prompt>` — print + copy to clipboard
+- `myai --setup` — configure `$PROFILE` for in-shell execution
+- `myai --teardown` — remove `$PROFILE` configuration
 
 **Examples:**
 ```
-ai list all PDF files modified in the last 7 days
-ai -p switch to parent directory | iex
-ai -c find processes using port 3000 and kill them
+myai list all PDF files modified in the last 7 days
+myai -p switch to parent directory | iex
+myai -c find processes using port 3000 and kill them
 ```
 
 **Configuration (environment variables):**
@@ -243,11 +241,11 @@ def _get_profile_path() -> Path:
 
 def _setup_source_line() -> str:
     """Return the dot-source line to add to $PROFILE."""
-    return f'. "{_PS1_PATH}"  # ai CLI wrapper\n'
+    return f'. "{_PS1_PATH}"  # myai CLI wrapper\n'
 
 
 def setup_profile() -> None:
-    """Add ai wrapper to $PROFILE if not already present."""
+    """Add myai wrapper to $PROFILE if not already present."""
     profile_path = _get_profile_path()
     line = _setup_source_line()
 
@@ -258,8 +256,6 @@ def setup_profile() -> None:
         if line in content:
             console.print("[bold green]OK:[/bold green] Already configured in $PROFILE.")
             return
-    else:
-        content = ""
 
     with open(profile_path, "a", encoding="utf-8") as f:
         f.write(line)
@@ -268,13 +264,13 @@ def setup_profile() -> None:
     copy_to_clipboard(cmd)
     console.print(
         f"[bold green]Done:[/bold green] Added to [bold]{profile_path}[/bold]\n"
-        f"   Next time you open a shell, [bold]ai[/bold] will run commands in-session.\n"
+        f"   Next time you open a shell, [bold]myai[/bold] will run commands in-session.\n"
         f"   Loading command copied to clipboard: [bold]{cmd}[/bold]"
     )
 
 
 def teardown_profile() -> None:
-    """Remove ai wrapper lines from $PROFILE."""
+    """Remove myai wrapper lines from $PROFILE."""
     profile_path = _get_profile_path()
 
     if not profile_path.exists():
@@ -285,13 +281,13 @@ def teardown_profile() -> None:
     new_lines = []
     removed = 0
     for line in content.splitlines(keepends=True):
-        if "shell-ai.ps1" in line:
+        if "myai.ps1" in line:
             removed += 1
             continue
         new_lines.append(line)
 
     if removed == 0:
-        console.print("[bold green]OK:[/bold green] No ai configuration found in $PROFILE.")
+        console.print("[bold green]OK:[/bold green] No myai configuration found in $PROFILE.")
         return
 
     profile_path.write_text("".join(new_lines), encoding="utf-8")
@@ -309,10 +305,7 @@ OPTS_LONG = {"--print": "print", "--clip": "clip", "--setup": "setup", "--teardo
 
 
 def parse_args() -> tuple[str, str | None]:
-    """Parse sys.argv. Returns (mode, prompt).
-
-    mode is one of: "help", "print", "clip", "setup", "teardown", "interactive"
-    """
+    """Parse sys.argv. Returns (mode, prompt)."""
     if len(sys.argv) < 2:
         return ("help", None)
 
@@ -338,15 +331,13 @@ def parse_args() -> tuple[str, str | None]:
 # ---------------------------------------------------------------------------
 
 def main() -> None:
-    """Entry point for the `ai` CLI command."""
+    """Entry point for the `myai` CLI command."""
     mode, prompt = parse_args()
 
-    # ---- help ----
     if mode == "help":
         console.print(HELP_TEXT)
         return
 
-    # ---- setup / teardown (no API key needed) ----
     if mode == "setup":
         setup_profile()
         return
@@ -354,7 +345,6 @@ def main() -> None:
         teardown_profile()
         return
 
-    # ---- all other modes need an API key ----
     if not API_KEY:
         console.print(
             "[bold red]Error:[/bold red] No API key found.\n"
@@ -363,7 +353,6 @@ def main() -> None:
         )
         sys.exit(1)
 
-    # ---- print / clip modes ----
     if mode in ("print", "clip"):
         if not prompt:
             console.print(f"[bold red]Error:[/bold red] -{mode[0]} requires a prompt.")
@@ -379,7 +368,6 @@ def main() -> None:
             print("(Copied to clipboard)", file=sys.stderr)
         return
 
-    # ---- interactive mode (default) ----
     if not prompt:
         console.print(HELP_TEXT)
         return
@@ -398,10 +386,10 @@ def main() -> None:
         if choice == "y":
             run_command(command)
             break
-        elif choice == "n":
+        if choice == "n":
             console.print("[dim]Cancelled.[/dim]")
             break
-        elif choice == "e":
+        if choice == "e":
             command = edit_command(command)
             display_command(command)
 

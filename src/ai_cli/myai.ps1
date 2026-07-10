@@ -1,16 +1,16 @@
-# PowerShell wrapper for the `ai` command-line tool.
+# PowerShell wrapper for the `myai` command-line tool.
 #
 # HOW IT WORKS:
-#   1. Calls `ai.exe -p <your prompt>` → Python generates the command, prints it raw.
+#   1. Calls `myai.exe -p <your prompt>` → Python generates the command, prints it raw.
 #   2. Displays the command and asks for confirmation (y/n/e).
 #   3. Runs it with Invoke-Expression — IN YOUR CURRENT SHELL.
 #
 #   This means `cd`, `Set-Location`, environment changes, and all other side
 #   effects actually stick around in your session.
 #
-# MANAGED BY: `ai --setup` / `ai --teardown`
+# MANAGED BY: `myai --setup` / `myai --teardown`
 
-function ai {
+function myai {
     param(
         [Parameter(ValueFromRemainingArguments = $true)]
         [string[]]$Args
@@ -22,27 +22,27 @@ function ai {
     # ---- Special commands: pass through to ai.exe directly ----
     $special = @("--setup", "--teardown", "-c", "--clip", "--print", "--help")
     if ($first -in $special) {
-        ai.exe @Args
+        myai.exe @Args
         return
     }
 
     if (-not $prompt) {
         Write-Host @"
 
-ai — AI Command Generator
+myai — AI Command Generator
 
-Usage: ai <natural language description>
+Usage: myai <natural language description>
 
 Examples:
-  ai list all PDF files modified in the last 7 days
-  ai find processes using port 3000 and kill them
-  ai convert all .png files in current directory to .webp
+    myai list all PDF files modified in the last 7 days
+    myai find processes using port 3000 and kill them
+    myai convert all .png files in current directory to .webp
 "@
         return
     }
 
     Write-Host "`nGenerating command..." -ForegroundColor Yellow
-    $cmd = ai.exe -p @Args 2>$null
+        $cmd = myai.exe -p @Args 2>$null
 
     if ($LASTEXITCODE -ne 0 -or -not $cmd) {
         Write-Host "Error: Failed to generate command." -ForegroundColor Red

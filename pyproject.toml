@@ -10,7 +10,7 @@ dependencies = [
 ]
 
 [project.scripts]
-ai = "ai_cli.main:main"
+myai = "ai_cli.main:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -18,4 +18,4 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/ai_cli"]
-force-include = { "src/ai_cli/shell-ai.ps1" = "ai_cli/shell-ai.ps1" }
+force-include = { "src/ai_cli/myai.ps1" = "ai_cli/myai.ps1" }

@@ -1,4 +1,4 @@
-# shellai — AI Command Generator
+# myai — AI Command Generator
 
 > **Lightweight · Cross‑platform · In‑shell execution**
 
@@ -8,9 +8,9 @@ No bloat — single Python file, three dependencies, `uv tool install .` and you
 Unlike similar tools, `shellai` can run commands **directly in your current shell** — `cd`, environment variables, and all side effects actually stick. Works on Windows (PowerShell) and Linux/macOS (bash).
 
 ```bash
-ai list all PDF files modified in the last 7 days
-ai -p switch to parent directory | iex
-ai -c find processes using port 3000 and kill them
+myai list all PDF files modified in the last 7 days
+myai -p switch to parent directory | iex
+myai -c find processes using port 3000 and kill them
 ```
 
 ## Features
@@ -29,7 +29,7 @@ ai -c find processes using port 3000 and kill them
 git clone https://github.com/alephme/shellai.git
 cd shellai
 uv tool install .
-ai --setup     # optional: auto-configure $PROFILE
+myai --setup    # optional: auto-configure $PROFILE
 ```
 
 ## Configuration
@@ -59,7 +59,7 @@ AI_MODEL=deepseek-v4-flash
 ### Interactive mode
 
 ```bash
-ai list all PDF files modified in the last 7 days
+myai list all PDF files modified in the last 7 days
 ```
 
 Displays the command in a Rich syntax‑highlighted panel, then `y/n/e`.
@@ -67,8 +67,8 @@ Displays the command in a Rich syntax‑highlighted panel, then `y/n/e`.
 ### Print / pipe mode
 
 ```bash
-ai -p switch to parent directory | iex
-ai --print create a new directory called project | iex
+myai -p switch to parent directory | iex
+myai --print create a new directory called project | iex
 ```
 
 Prints **only** the raw command. Pipe to `Invoke-Expression` (`iex`) to run it in your **current** shell — `cd` and env changes stick.
@@ -76,8 +76,8 @@ Prints **only** the raw command. Pipe to `Invoke-Expression` (`iex`) to run it i
 ### Clipboard mode
 
 ```bash
-ai -c kill processes using port 3000
-ai --clip show network config
+myai -c kill processes using port 3000
+myai --clip show network config
 ```
 
 Prints the command **and** copies it to clipboard.
@@ -85,14 +85,14 @@ Prints the command **and** copies it to clipboard.
 ### Setup & teardown
 
 ```bash
-ai --setup      # add PS wrapper to $PROFILE
-ai --teardown   # remove PS wrapper from $PROFILE
+myai --setup      # add PS wrapper to $PROFILE
+myai --teardown   # remove PS wrapper from $PROFILE
 ```
 
-After `--setup` (and restart / re‑sourcing), `ai` runs directly in your shell:
+After `--setup` (and restart / re‑sourcing), `myai` runs directly in your shell:
 
 ```bash
-ai cd ..        # working directory actually changes
+myai cd ..       # working directory actually changes
 ```
 
 ## License
@@ -101,7 +101,7 @@ MIT
 
 ---
 
-## shellai — AI 命令行生成器（中文版）
+## myai — AI 命令行生成器（中文版）
 
 > **轻量 · 跨平台 · 原地执行**
 
@@ -111,9 +111,9 @@ MIT
 与同类工具不同，`shellai` 可以在**当前 shell 中直接执行**命令——`cd`、环境变量等所有副作用都会保留。同时支持 Windows (PowerShell) 和 Linux/macOS (bash)。
 
 ```bash
-ai 列出最近7天修改过的所有 PDF 文件
-ai -p 切换到上级目录 | iex
-ai -c 找到占用 3000 端口的进程并终止
+myai 列出最近7天修改过的所有 PDF 文件
+myai -p 切换到上级目录 | iex
+myai -c 找到占用 3000 端口的进程并终止
 ```
 
 ### 功能
@@ -123,7 +123,7 @@ ai -c 找到占用 3000 端口的进程并终止
 | **交互式** | _(默认)_ | _(默认)_ | Rich 面板展示 + `y/n/e` 确认 + 子进程执行 |
 | **打印** | `-p` | `--print` | 仅输出原始命令，管道到 `iex` 原地执行 |
 | **剪贴板** | `-c` | `--clip` | 打印命令 + 写入剪贴板 |
-| **配置** | — | `--setup` | 自动配置 `$PROFILE`，之后 `ai` 直接原地执行 |
+| **配置** | — | `--setup` | 自动配置 `$PROFILE`，之后 `myai` 直接原地执行 |
 | **取消配置** | — | `--teardown` | 移除 `$PROFILE` 中的配置 |
 
 ### 安装
@@ -132,7 +132,7 @@ ai -c 找到占用 3000 端口的进程并终止
 git clone https://github.com/alephme/shellai.git
 cd shellai
 uv tool install .
-ai --setup     # 可选：一键配置 $PROFILE
+myai --setup    # 可选：一键配置 $PROFILE
 ```
 
 ### 配置
@@ -162,7 +162,7 @@ AI_MODEL=deepseek-v4-flash
 #### 交互模式
 
 ```bash
-ai 列出最近7天修改过的所有 PDF 文件
+myai 列出最近7天修改过的所有 PDF 文件
 ```
 
 在 Rich 语法高亮面板中显示生成的命令，然后 `y/n/e` 选择。
@@ -170,8 +170,8 @@ ai 列出最近7天修改过的所有 PDF 文件
 #### 打印 / 管道模式
 
 ```bash
-ai -p 切换到上级目录 | iex
-ai --print 创建一个叫 project 的新目录 | iex
+myai -p 切换到上级目录 | iex
+myai --print 创建一个叫 project 的新目录 | iex
 ```
 
 **仅**输出原始命令文本到 stdout。管道到 `Invoke-Expression`（`iex`）即可在**当前** shell 中执行——`cd` 和环境变量修改都会保留。
@@ -179,8 +179,8 @@ ai --print 创建一个叫 project 的新目录 | iex
 #### 剪贴板模式
 
 ```bash
-ai -c 找到占用 3000 端口的进程并终止
-ai --clip 显示网络配置
+myai -c 找到占用 3000 端口的进程并终止
+myai --clip 显示网络配置
 ```
 
 打印命令**同时**复制到剪贴板。
@@ -188,14 +188,14 @@ ai --clip 显示网络配置
 #### 配置与取消
 
 ```bash
-ai --setup      # 往 $PROFILE 添加 PS 包装函数
-ai --teardown   # 从 $PROFILE 中移除 PS 包装函数
+myai --setup      # 往 $PROFILE 添加 PS 包装函数
+myai --teardown   # 从 $PROFILE 中移除 PS 包装函数
 ```
 
-执行 `--setup` 后（重启终端或重新加载），`ai` 直接在当前 shell 中运行：
+执行 `--setup` 后（重启终端或重新加载），`myai` 直接在当前 shell 中运行：
 
 ```bash
-ai cd ..        # 工作目录真的变了
+myai cd ..      # 工作目录真的变了
 ```
 
 ### 许可证
